@@ -29,7 +29,9 @@ export class TelemetryService {
 
     async create(data) {
       const event = await this.prisma.telemetryEvent.create({ data });
-      await this.mailService.sendEventAlert(event);
+
+      this.mailService.sendEventAlert(event).catch(console.error);
+
       return event;
     }
 
@@ -53,7 +55,7 @@ export class TelemetryService {
           totalSessionTime: totalTime,
         },
       });
-      await this.mailService.sendEventAlert(event);
+      this.mailService.sendEventAlert(event).catch(console.error);
       return event;
   }
 
