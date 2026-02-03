@@ -7,18 +7,51 @@ export class MailService {
 
   async sendEventAlert(event: any) {
     const html = `
-      <div style="font-family: Arial, sans-serif">
-        <h2>Nuevo evento de telemetría</h2>
-        <table border="1" cellpadding="8" cellspacing="0">
-          <tr><td><b>ID</b></td><td>${event.id}</td></tr>
-          <tr><td><b>Tipo</b></td><td>${event.eventType}</td></tr>
-          <tr><td><b>Activo</b></td><td>${event.isActive}</td></tr>
-          <tr><td><b>Creado</b></td><td>${event.createdAt}</td></tr>
-          <tr><td><b>Finalizado</b></td><td>${event.endedAt ?? '—'}</td></tr>
-          <tr><td><b>Duración</b></td><td>${event.totalSessionTime ?? '—'}</td></tr>
-        </table>
-      </div>
-    `;
+        <div style="font-family: Arial, Helvetica, sans-serif; background:#f4f6f8; padding:20px">
+        <div style="max-width:600px; margin:0 auto; background:#ffffff; border-radius:8px; overflow:hidden; box-shadow:0 2px 6px rgba(0,0,0,0.1)">
+            
+            <div style="background:#1f2933; color:#ffffff; padding:16px 20px">
+            <h2 style="margin:0; font-size:18px">🚀 Nuevo evento de telemetría</h2>
+            </div>
+
+            <div style="padding:20px">
+            <p style="margin-top:0; color:#555">
+                Se ha registrado un nuevo evento en el sistema:
+            </p>
+
+            <div style="display:grid; grid-template-columns: 140px 1fr; row-gap:10px; column-gap:10px; font-size:14px">
+                <div style="font-weight:bold; color:#333">ID</div>
+                <div>${event.id}</div>
+
+                <div style="font-weight:bold; color:#333">Tipo</div>
+                <div>${event.eventType}</div>
+
+                <div style="font-weight:bold; color:#333">Activo</div>
+                <div>${event.isActive ? 'Sí' : 'No'}</div>
+
+                <div style="font-weight:bold; color:#333">Plataforma</div>
+                <div>${event.platform}</div>
+
+                <div style="font-weight:bold; color:#333">Versión</div>
+                <div>${event.gameVersion}</div>
+
+                <div style="font-weight:bold; color:#333">Creado</div>
+                <div>${event.createdAt}</div>
+
+                <div style="font-weight:bold; color:#333">Finalizado</div>
+                <div>${event.endedAt ?? '—'}</div>
+
+                <div style="font-weight:bold; color:#333">Duración</div>
+                <div>${event.totalSessionTime ?? '—'}</div>
+            </div>
+            </div>
+
+            <div style="background:#f9fafb; padding:12px 20px; font-size:12px; color:#777; text-align:center">
+            Telemetry Games · Sistema automático de monitoreo
+            </div>
+        </div>
+        </div>
+        `;
 
     await axios.post(
       this.brevoUrl,
