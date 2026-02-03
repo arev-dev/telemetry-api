@@ -5,41 +5,55 @@ import { MailService } from 'src/mail.service';
 
 @Injectable()
 export class SessionCleanerService {
+    private idleSince: number | null = null
+    private isSleeping = false
     constructor(
     private readonly prisma: PrismaService,
     private readonly mailService: MailService,
     ) {}
 
-    @Cron("*/30 * * * * *") // cada 30s
-    async closeDeadSessions() {
+    @Cron("*/30 * * * * *")
+        async closeDeadSessions() {
+        if (this.isSleeping) return
+
         const limit = new Date(Date.now() - 60_000)
         console.log("The session cleaner is running...")
-        
-        // Obtener los ids antes de actualizar
-        const sessionsToUpdate = await this.prisma.telemetryEvent.findMany({
-            where: {
-                isActive: true,
-                lastPingAt: { lt: limit }
-            },
-            select: { id: true }
-        })
-        
+
         const result = await this.prisma.telemetryEvent.updateMany({
             where: {
-                isActive: true,
-                lastPingAt: { lt: limit }
+            isActive: true,
+            lastPingAt: { lt: limit }
             },
-            data: { isActive: false, eventType: 'session_end_cronor', endedAt: new Date() }
+            data: { 
+            isActive: false, 
+            eventType: 'session_end_cronor', 
+            endedAt: new Date() 
+            }
         })
-        
+
         if (result.count > 0) {
-            const ids = sessionsToUpdate.map(s => s.id)
-            console.log(`Updated ${result.count} sessions:`, ids)
-            // this.mailService.sendEventAlert(result).catch(console.error);
+            console.log(`Updated ${result.count} sessions`)
+            this.idleSince = null
+        } else {
+            if (!this.idleSince) {
+            this.idleSince = Date.now()
+            }
+
+            const idleTime = Date.now() - this.idleSince
+
+            if (idleTime > 10 * 60 * 1000) {
+            console.log("Cron going to sleep (no activity)")
+            this.isSleeping = true
+            }
         }
-        else{
-            console.log("No sessions to update.")
-        }
+    }
+
+    wakeUp() {
+    if (this.isSleeping) {
+        console.log("Cron woke up")
+        this.isSleeping = false
+        this.idleSince = null
+    }
     }
   
 }

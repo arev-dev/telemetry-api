@@ -1,12 +1,14 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
 import { MailService } from 'src/mail.service';
+import { SessionCleanerService } from 'src/sessioncleaner.service';
 
 @Injectable()
 export class TelemetryService {
     constructor(
     private readonly prisma: PrismaService,
     private readonly mailService: MailService,
+    private readonly sessionCleanerService: SessionCleanerService,
   ) {}
 
     async getActiveSessions() {
@@ -80,14 +82,16 @@ export class TelemetryService {
     }
 
     async ping(sessionId: string) {
-      return this.prisma.telemetryEvent.update({
-        where: { id: sessionId },
-        data: {
-          lastPingAt: new Date(),
-          isActive: true
-        }
-      })
-    }
+    this.sessionCleanerService.wakeUp()
+
+    return this.prisma.telemetryEvent.update({
+      where: { id: sessionId },
+      data: {
+        lastPingAt: new Date(),
+        isActive: true
+      }
+    })
+  }
 
   private formatDuration(ms: number) {
     const totalSeconds = Math.floor(ms / 1000);
