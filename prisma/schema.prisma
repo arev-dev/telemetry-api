@@ -22,5 +22,6 @@ model TelemetryEvent {
   isActive    Boolean?
   createdAt   DateTime @default(now())
   endedAt     DateTime? 
+  lastPingAt  DateTime @default(now())
   totalSessionTime String?
 }

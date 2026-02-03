@@ -21,28 +21,28 @@ export class MailService {
 
             <div style="display:grid; grid-template-columns: 140px 1fr; row-gap:10px; column-gap:10px; font-size:14px">
                 <div style="font-weight:bold; color:#333">ID</div>
-                <div>${event.id}</div>
+                <div>${event.id}</div><br><br>
 
                 <div style="font-weight:bold; color:#333">Tipo</div>
-                <div>${event.eventType}</div>
+                <div>${event.eventType}</div><br><br>
 
                 <div style="font-weight:bold; color:#333">Activo</div>
-                <div>${event.isActive ? 'Sí' : 'No'}</div>
+                <div>${event.isActive ? 'Sí' : 'No'}</div><br><br>
 
                 <div style="font-weight:bold; color:#333">Plataforma</div>
-                <div>${event.platform}</div>
+                <div>${event.platform}</div><br><br>
 
                 <div style="font-weight:bold; color:#333">Versión</div>
-                <div>${event.gameVersion}</div>
+                <div>${event.gameVersion}</div><br><br>
 
                 <div style="font-weight:bold; color:#333">Creado</div>
-                <div>${event.createdAt}</div>
+                <div>${event.createdAt}</div><br><br>
 
                 <div style="font-weight:bold; color:#333">Finalizado</div>
-                <div>${event.endedAt ?? '—'}</div>
+                <div>${event.endedAt ?? '—'}</div><br><br>
 
                 <div style="font-weight:bold; color:#333">Duración</div>
-                <div>${event.totalSessionTime ?? '—'}</div>
+                <div>${event.totalSessionTime ?? '—'}</div><br><br>
             </div>
             </div>
 

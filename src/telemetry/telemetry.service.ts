@@ -27,12 +27,32 @@ export class TelemetryService {
       });
     }
 
+    async getSessions() {
+      const sessions = await this.prisma.telemetryEvent.findMany({
+        where: {
+          OR: [
+            { eventType: 'session_end', isActive: false },
+            { eventType: 'session_start', isActive: true }
+          ]
+        },
+      });
+
+      return sessions;
+    }
+
     async create(data) {
       const event = await this.prisma.telemetryEvent.create({ data });
 
       this.mailService.sendEventAlert(event).catch(console.error);
 
       return event;
+    }
+
+    async killSessions(){
+      return this.prisma.telemetryEvent.updateMany({
+        where: { isActive: true },
+        data: { isActive: false },
+      });
     }
 
     async endSession(id: string) {
@@ -57,7 +77,17 @@ export class TelemetryService {
       });
       this.mailService.sendEventAlert(event).catch(console.error);
       return event;
-  }
+    }
+
+    async ping(sessionId: string) {
+      return this.prisma.telemetryEvent.update({
+        where: { id: sessionId },
+        data: {
+          lastPingAt: new Date(),
+          isActive: true
+        }
+      })
+    }
 
   private formatDuration(ms: number) {
     const totalSeconds = Math.floor(ms / 1000);

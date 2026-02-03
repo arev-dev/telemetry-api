@@ -12,6 +12,16 @@ export class TelemetryController {
     return this.telemetryService.getActiveSessions();
   }
 
+  @Get('get-sessions')
+  getSessions() {
+    return this.telemetryService.getSessions();
+  }
+
+  @Post('session-ping/:id')
+    async ping(@Param('id') id: string) {
+    return this.telemetryService.ping(id)
+  }
+
   @Post('session-start')
   createSession(@Body() dto: any) {
     return this.telemetryService.create({
@@ -26,7 +36,12 @@ export class TelemetryController {
       throw new BadRequestException('Session ID is required');
     }
     return this.telemetryService.endSession(id);
-}
+  }
+
+  @Post('kill-sessions')
+  async killSessions() {
+    return this.telemetryService.killSessions();
+  }
 
   @Post('error')
   reportError(@Body() dto: any) {
