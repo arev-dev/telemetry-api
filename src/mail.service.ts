@@ -1,21 +1,9 @@
-// mail.service.ts
-import * as nodemailer from 'nodemailer';
 import { Injectable } from '@nestjs/common';
+import axios from 'axios';
 
 @Injectable()
 export class MailService {
-  private transporter = nodemailer.createTransport({
-    host: process.env.SMTP_HOST,
-    port: 465,
-    secure: true, // STARTTLS
-    auth: {
-      user: process.env.SMTP_USER,
-      pass: process.env.SMTP_PASS,
-    },
-    connectionTimeout: 5000,
-    greetingTimeout: 5000,
-    socketTimeout: 5000,
-  });
+  private readonly brevoUrl = 'https://api.brevo.com/v3/smtp/email';
 
   async sendEventAlert(event: any) {
     const html = `
@@ -32,11 +20,26 @@ export class MailService {
       </div>
     `;
 
-    await this.transporter.sendMail({
-      from: `${process.env.MAIL_NAME} <${process.env.MAIL_USER}>`,
-      to: process.env.MAIL_TO,
-      subject: `Nuevo evento: ${event.eventType}`,
-      html,
-    });
+    await axios.post(
+      this.brevoUrl,
+      {
+        sender: {
+          name: process.env.MAIL_NAME,
+          email: process.env.MAIL_USER, // verificado en Brevo
+        },
+        to: [
+          { email: process.env.MAIL_TO },
+        ],
+        subject: `Nuevo evento: ${event.eventType}`,
+        htmlContent: html,
+      },
+      {
+        headers: {
+          'api-key': process.env.BREVO_API_KEY,
+          'Content-Type': 'application/json',
+        },
+        timeout: 5000,
+      }
+    );
   }
 }
