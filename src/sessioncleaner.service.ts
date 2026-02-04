@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common"
-import { PrismaService } from 'src/prisma.service';
+import { PrismaService } from './prisma.service';
 import { Cron } from "@nestjs/schedule"
-import { MailService } from 'src/mail.service';
+import { MailService } from './mail.service';
 
 @Injectable()
 export class SessionCleanerService {

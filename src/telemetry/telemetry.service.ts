@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { PrismaService } from 'src/prisma.service';
-import { MailService } from 'src/mail.service';
-import { SessionCleanerService } from 'src/sessioncleaner.service';
+import { PrismaService } from '../prisma.service';
+import { MailService } from '../mail.service';
+import { SessionCleanerService } from '../sessioncleaner.service';
 
 @Injectable()
 export class TelemetryService {
