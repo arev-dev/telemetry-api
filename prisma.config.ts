@@ -11,6 +11,6 @@ export default defineConfig({
   },
   engine: "classic",
   datasource: {
-    url: env("POSTGRES_URL"),
+    url: env("POSTGRES_VER__DATABASE_URL"),
   },
 });
