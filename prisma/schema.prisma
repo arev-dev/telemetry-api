@@ -9,19 +9,19 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
 model TelemetryEvent {
-  id          String   @id @default(uuid())
-  eventType   String
-  platform    String?
-  gameVersion String?
-  message     String?
-  isActive    Boolean?
-  createdAt   DateTime @default(now())
-  endedAt     DateTime? 
-  lastPingAt  DateTime @default(now())
+  id               String    @id @default(uuid()) @db.Uuid
+  eventType        String
+  platform         String?
+  gameVersion      String?
+  message          String?
+  isActive         Boolean?
+  createdAt        DateTime  @default(now()) @db.Timestamptz
+  endedAt          DateTime? @db.Timestamptz
+  lastPingAt       DateTime  @default(now()) @db.Timestamptz
   totalSessionTime String?
 }
