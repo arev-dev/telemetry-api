@@ -33,8 +33,9 @@ export class TelemetryService {
       const sessions = await this.prisma.telemetryEvent.findMany({
         where: {
           OR: [
-            { eventType: 'session_end', isActive: false },
-            { eventType: 'session_start', isActive: true }
+            { eventType: 'session_end' },
+            { eventType: 'session_end_cronor' },
+            { eventType: 'session_start'}
           ]
         },
       });
