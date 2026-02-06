@@ -18,7 +18,7 @@ export class SessionCleanerService {
 
         // vars
         const now = new Date();
-        const limit = new Date(Date.now() - 4_000) // 4 seconds
+        const limit = new Date(Date.now() - 3_000) // 3 seconds
         const result = { count: 0 }
 
         var sessions_lapsed = await this.prisma.telemetryEvent.findMany({
