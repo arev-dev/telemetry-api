@@ -25,3 +25,14 @@ model TelemetryEvent {
   lastPingAt       DateTime  @default(now()) @db.Timestamptz
   totalSessionTime String?
 }
+
+model EmailLog {
+  id         String   @id @default(uuid()) @db.Uuid
+  SessionId  String   @db.Uuid
+  toEmail    String
+  subject    String
+  htmlContent String
+  sentAt     DateTime @default(now()) @db.Timestamptz
+  status     String
+  errorMsg   String?
+}

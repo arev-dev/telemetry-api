@@ -83,15 +83,15 @@ export class TelemetryService {
     }
 
     async ping(sessionId: string) {
-    this.sessionCleanerService.wakeUp()
+      this.sessionCleanerService.wakeUp()
 
-    return this.prisma.telemetryEvent.update({
-      where: { id: sessionId },
-      data: {
-        lastPingAt: new Date(),
-        isActive: true
-      }
-    })
+      return this.prisma.telemetryEvent.update({
+        where: { id: sessionId },
+        data: {
+          lastPingAt: new Date(),
+          isActive: true
+        }
+      })
   }
 
   private formatDuration(ms: number) {
