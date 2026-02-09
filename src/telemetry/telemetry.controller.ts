@@ -1,7 +1,9 @@
-import { Body, Controller, Post, Put ,Param, Get, NotFoundException, BadGatewayException, InternalServerErrorException, BadRequestException } from '@nestjs/common';
+import { Body, Controller, Post, Put ,Param, Get, NotFoundException, BadGatewayException, InternalServerErrorException, BadRequestException, UseGuards } from '@nestjs/common';
 import { TelemetryService } from './telemetry.service';
+import { ApiKeyGuard } from 'src/guard.service';
 
 @Controller('telemetry')
+@UseGuards(ApiKeyGuard)
 export class TelemetryController {
     constructor(
     private readonly telemetryService: TelemetryService,
